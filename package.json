@@ -1,0 +1,36 @@
+{
+  "name": "@zhenryx/react-native-ui",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && node src/scripts/copy-assets.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "react-native",
+    "ui",
+    "components"
+  ],
+  "author": "zhenryx",
+  "license": "ISC",
+  "description": "A React Native UI component library",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.0",
+    "@types/react-native": "0.70.0",
+    "typescript": "5.0.4"
+  },
+  "peerDependencies": {
+    "react": ">=18.1.0",
+    "react-native": ">=0.70.0"
+  }
+}
