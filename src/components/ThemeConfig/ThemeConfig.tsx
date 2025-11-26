@@ -1,45 +1,30 @@
-import React, { createContext, ReactNode, useContext, useState, useCallback } from "react";
-import { defaultTheme } from './styles/index'
-import { createTheme, ThemeMode, ThemeOptions } from './styles/themes/default'
+import { createContext, ReactNode, useContext, useState } from "react";
+import defaultTheme from "./styles/defaultTheme";
 export type Theme = typeof defaultTheme;
 interface ThemeContextValue {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  applyTheme: (options?: ThemeOptions) => void;//项目整个主题变化
 }
-const ThemeContext = createContext<ThemeContextValue | null>(null);
 const warnNoProvider = () => {
   if (__DEV__) {
     console.warn('ThemeProvider没有应用～');
   }
 };
-const defaultContextValue: ThemeContextValue = {
+const defaultContextValue = {
   theme: defaultTheme,
   setTheme: warnNoProvider,
-  applyTheme: warnNoProvider,
 };
-
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
-  const applyTheme = useCallback(
-    (options?: ThemeOptions) => {
-      setTheme(createTheme(options));
-    },
-    []
-  );
+  const [theme, setTheme] = useState(defaultTheme)
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, applyTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
-  );
-};
-
-export const useTheme = (): ThemeContextValue => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    return defaultContextValue;
-  }
-  return context;
-};
-
-export { defaultTheme as theme };
+  )
+}
+export const useTheme = () => {
+  const context = useContext(ThemeContext)
+  if (!context) return defaultContextValue
+  return context
+}
