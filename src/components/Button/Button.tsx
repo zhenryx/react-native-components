@@ -1,26 +1,30 @@
-import React, { useMemo } from "react";
-import { ImageSourcePropType, ImageStyle, Pressable, StyleProp, TextStyle, ViewStyle, Image } from "react-native";
+import React, { ComponentType, useMemo } from "react";
+import { ImageSourcePropType, ImageStyle, Pressable, StyleProp, TextStyle, ViewStyle, Image, View } from "react-native";
 import { Text } from "../Text/Text";
 import { useTheme } from "../ThemeConfig/ThemeConfig";
 type ButtonFill = 'solid' | 'outline';
 export interface ButtonProps {
   title: string;
+  InnerComponent?: ComponentType<any>; // 支持渐变
+  linearGradientProps?: Record<string, any>;
   fill?: ButtonFill;
   width?: ViewStyle['width'];
   fullWidth?: boolean;
   height?: number;
   onClick?: () => void;
-  color?: string;//solid背景、outline边框与文本
-  feedbackEffect?: boolean// 是否开启点击反馈的样式效果
-  disabled?: boolean,
-  icon?:ImageSourcePropType,
-  iconStyle?:StyleProp<ImageStyle>,
-  iconPosition?:'left'|'right'
-  buttonStyle?: StyleProp<ViewStyle>
-  textStyle?: StyleProp<TextStyle>
+  color?: string; // solid背景、outline边框与文本
+  feedbackEffect?: boolean; // 是否开启点击反馈的样式效果
+  disabled?: boolean;
+  icon?: ImageSourcePropType;
+  iconStyle?: StyleProp<ImageStyle>;
+  iconPosition?: 'left' | 'right';
+  buttonStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 export const Button: React.FC<ButtonProps> = React.memo(
   ({
+    InnerComponent = View,
+    linearGradientProps,
     title,
     fill = 'solid',
     width = 120,
@@ -32,44 +36,64 @@ export const Button: React.FC<ButtonProps> = React.memo(
     feedbackEffect = true,
     icon,
     iconStyle,
-    iconPosition="right",
+    iconPosition = "right",
     buttonStyle,
     textStyle
   }) => {
     const { theme } = useTheme()
     const defaultColor = theme['$primary-color']
     const actualColor = color || defaultColor;
-    const baseButtonStyle = useMemo(() => {
+    const baseViewStyle = useMemo((): ViewStyle => {
       const isOutline = fill === 'outline';
-      const base: ViewStyle = {
-        borderRadius: height / 2,
+      const isGradient = InnerComponent &&
+        ((InnerComponent as any).displayName === 'LinearGradient' ||
+          (InnerComponent as any).name === 'LinearGradient');
+      return {
+        borderRadius: theme['$button-border-radius'],
         borderWidth: isOutline ? 1 : 0,
         borderColor: isOutline ? actualColor : 'transparent',
-        backgroundColor: isOutline ? 'transparent' : actualColor,
-        opacity: disabled ? 0.5 : 1,
+        backgroundColor: isGradient ? 'transparent' : (isOutline ? '#fff' : actualColor),
         width: fullWidth ? '100%' : width,
         height: height,
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        flexDirection:iconPosition==='right'?'row':'row-reverse'
+        flexDirection: iconPosition === 'right' ? 'row' : 'row-reverse',
       };
-      return base
-    }, [width, height, fill, actualColor, fullWidth, disabled, iconPosition]);
+    }, [width, height, fill, actualColor, fullWidth, iconPosition, theme, InnerComponent]);
     const textColor = fill === 'outline' ? actualColor : '#fff';
-    const defaultIconSize = height * 0.5; 
-    const iconMargin = iconPosition === 'right' 
-      ? { marginLeft: 5 } 
+    const defaultIconSize = height * 0.5;
+    const iconMargin = iconPosition === 'right'
+      ? { marginLeft: 5 }
       : { marginRight: 5 };
     const pressableStyle = ({ pressed }: { pressed: boolean }) => [
-      baseButtonStyle,
+      { opacity: disabled ? 0.5 : 1 },
       pressed && feedbackEffect && !disabled && { opacity: 0.85 },
-      buttonStyle,
-    ]
-    return (
-      <Pressable style={pressableStyle} onPress={disabled ? undefined : onClick} disabled={disabled} >
+    ];
+    const InnerComponentStyle: StyleProp<ViewStyle> = [baseViewStyle, buttonStyle];
+    const content = (
+      <>
         <Text style={[{ color: textColor }, textStyle]}>{title}</Text>
-        {icon&&<Image source={icon} style={[{width: defaultIconSize, height: defaultIconSize, ...iconMargin},iconStyle]}></Image>}
+        {icon && (
+          <Image
+            source={icon}
+            style={[{ width: defaultIconSize, height: defaultIconSize, ...iconMargin }, iconStyle]}
+          />
+        )}
+      </>
+    );
+    return (
+      <Pressable
+        style={pressableStyle}
+        onPress={disabled ? undefined : onClick}
+        disabled={disabled}
+      >
+        <InnerComponent
+          {...linearGradientProps}
+          style={InnerComponentStyle}
+        >
+          {content}
+        </InnerComponent>
       </Pressable>
     );
   }
