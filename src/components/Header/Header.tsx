@@ -16,7 +16,7 @@ export interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  title = '正保远程教育',
+  title = '自定义头部导航',
   backGroundColor,
   leftComponent,
   centerComponent,
@@ -88,3 +88,4 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   }
 })
+Header.displayName='Header'
