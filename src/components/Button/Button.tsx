@@ -11,7 +11,7 @@ export interface ButtonProps {
   width?: ViewStyle['width'];
   fullWidth?: boolean;
   height?: number;
-  onClick?: () => void;
+  onPress?: () => void;
   color?: string; // solid背景、outline边框与文本
   feedbackEffect?: boolean; // 是否开启点击反馈的样式效果
   disabled?: boolean;
@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = React.memo(
     width = 120,
     fullWidth = false,
     height = 36,
-    onClick = () => { },
+    onPress = () => { },
     color,
     disabled = false,
     feedbackEffect = true,
@@ -85,7 +85,7 @@ export const Button: React.FC<ButtonProps> = React.memo(
     return (
       <Pressable
         style={pressableStyle}
-        onPress={disabled ? undefined : onClick}
+        onPress={disabled ? undefined : onPress}
         disabled={disabled}
       >
         <InnerComponent
