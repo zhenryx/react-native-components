@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import defaultTheme from "./styles/defaultTheme";
 export type Theme = typeof defaultTheme;
 interface ThemeContextValue {

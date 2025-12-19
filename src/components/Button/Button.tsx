@@ -41,7 +41,7 @@ export const Button: React.FC<ButtonProps> = React.memo(
     textStyle
   }) => {
     const { theme } = useTheme()
-    const defaultColor = theme['$primary-color']
+    const defaultColor = theme['$primary-color']||'#e25829ff'
     const actualColor = color || defaultColor;
     const baseViewStyle = useMemo((): ViewStyle => {
       const isOutline = fill === 'outline';
@@ -52,7 +52,7 @@ export const Button: React.FC<ButtonProps> = React.memo(
         borderRadius: theme['$button-border-radius'],
         borderWidth: isOutline ? 1 : 0,
         borderColor: isOutline ? actualColor : 'transparent',
-        backgroundColor: isGradient ? 'transparent' : (isOutline ? '#fff' : actualColor),
+        backgroundColor: isGradient ? 'transparent' : (isOutline ? 'transparent' : actualColor),
         width: fullWidth ? '100%' : width,
         height: height,
         alignItems: 'center',
@@ -98,4 +98,4 @@ export const Button: React.FC<ButtonProps> = React.memo(
     );
   }
 )
-
+Button.displayName='Button'
