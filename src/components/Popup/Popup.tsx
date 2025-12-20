@@ -123,15 +123,7 @@ export const Popup: React.FC<PopupProps> = (props) => {
   const animatedStyle = useMemo(() => {
     if (position === 'center') {
       return {
-        opacity: animatedValue,
-        transform: [
-          {
-            scale: animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.9, 1],
-            }),
-          },
-        ],
+        opacity: animatedValue
       };
     }
 
