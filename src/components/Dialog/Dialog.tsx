@@ -4,7 +4,6 @@ import { Text } from '../Text/Text';
 import { useTheme } from '../ThemeConfig/ThemeConfig';
 import { Popup } from '../Popup/Popup';
 export interface DialogProps {
-  useModal?: boolean
   visible: boolean
   type?: 'alert' | 'confirm'
   title?: string;
@@ -20,7 +19,6 @@ export interface DialogProps {
   children?: React.ReactNode
 }
 export const Dialog: React.FC<DialogProps> = ({
-  useModal = true,
   visible = false,
   type = "alert",
   title = "提示",
@@ -62,7 +60,6 @@ export const Dialog: React.FC<DialogProps> = ({
   )
   return (
     <Popup
-      useModal={useModal}
       visible={visible}
       closeable={false}
       closeOnOverlayPress={closeOnOverlayPress}

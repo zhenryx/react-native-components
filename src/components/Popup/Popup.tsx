@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useEffect,
-  useMemo,
-  useState
-} from "react";
-import { OverLay } from "../Overlay/Overlay";
+import React, { useRef, useEffect, useState } from 'react';
 import {
   Animated,
   Easing,
@@ -12,10 +6,10 @@ import {
   ViewStyle,
   Image,
   Pressable,
-} from "react-native";
-import { useTheme } from "../ThemeConfig/ThemeConfig";
+} from 'react-native';
+import { OverLay } from '../Overlay/Overlay';
+import { useTheme } from '../ThemeConfig/ThemeConfig';
 export interface PopupProps {
-  useModal?: boolean;
   visible?: boolean;
   position?: 'bottom' | 'center' | 'top';
   height?: number;
@@ -28,158 +22,120 @@ export interface PopupProps {
   children?: React.ReactNode;
   onClose: () => void;
 }
-
-const ANIMATION_DURATION = 250;
-
-export const Popup: React.FC<PopupProps> = (props) => {
-  const {
-    useModal = true,
-    visible = false,
-    position = 'center',
-    height,
-    width,
-    round = false,
-    closeable = false,
-    closeOnOverlayPress = false,
-    overlayStyle,
-    style,
-    children,
-    onClose,
-  } = props;
-
+const DURATION = 250;
+export const Popup: React.FC<PopupProps> = ({
+  visible = false,
+  position = 'center',
+  height,
+  width,
+  round = false,
+  closeable = false,
+  closeOnOverlayPress = false,
+  overlayStyle,
+  style,
+  children,
+  onClose,
+}) => {
   const { theme } = useTheme();
+
   const radius = theme['$popup-border-radius'] ?? 10;
   const minHeight = theme['$popup-height'] ?? 100;
-  const closeIconWidth = theme['$popup-closeicon-width'] ?? 12;
-  const closeIconHeight = theme['$popup-closeicon-height'] ?? 12;
-  const centerPopRadius = theme['$popup-center-border-radius'] || 10;
+  const centerRadius = theme['$popup-center-border-radius'] ?? 10;
+  const closeIconSize = {
+    width: theme['$popup-closeicon-width'] ?? 12,
+    height: theme['$popup-closeicon-height'] ?? 12,
+  };
 
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  const fadeInstance = useRef<Animated.CompositeAnimation | null>(null);
-  const [realVisible, setRealVisible] = useState(visible);
+  const progress = useRef(new Animated.Value(visible ? 1 : 0)).current;
+  const [mounted, setMounted] = useState(visible);
 
   useEffect(() => {
-    if (visible) {
-      setRealVisible(true);
-    }
-    if (fadeInstance.current) {
-      fadeInstance.current.stop();
-    }
-    fadeInstance.current = Animated.timing(animatedValue, {
+    if (visible) setMounted(true);
+
+    Animated.timing(progress, {
       toValue: visible ? 1 : 0,
-      duration: ANIMATION_DURATION,
-      easing: visible ? Easing.out(Easing.cubic) : Easing.in(Easing.cubic),
+      duration: DURATION,
+      easing: visible
+        ? Easing.out(Easing.cubic)
+        : Easing.in(Easing.cubic),
       useNativeDriver: true,
-    });
-
-    fadeInstance.current.start(({ finished }) => {
-      if (finished && fadeInstance.current) {
-        fadeInstance.current = null;
-        if (!visible) {
-          setRealVisible(false);
-        }
+    }).start(({ finished }) => {
+      if (finished && !visible) {
+        setMounted(false);
       }
     });
-    return () => {
-      if (fadeInstance.current) {
-        fadeInstance.current.stop();
-        fadeInstance.current = null;
-      }
-    };
-  }, [visible]);
-  const baseStyle = useMemo<ViewStyle>(() => {
-    const base: ViewStyle = {
-      backgroundColor: '#fff',
-      ...(height ? { height } : { minHeight }),
-      width: position === 'center' ? width ?? 300 : '100%',
-    };
+  }, [visible, progress]);
 
-    if (position !== 'center') {
-      base.position = 'absolute';
-      base.left = 0;
-      base.right = 0;
-      if (position === 'bottom') {
-        base.bottom = 0;
-      } else {
-        base.top = 0;
-      }
-    }
-
-    if (round) {
-      if (position === 'center') {
-        base.borderRadius = centerPopRadius;
-      } else if (position === 'bottom') {
-        base.borderTopLeftRadius = radius;
-        base.borderTopRightRadius = radius;
-      } else {
-        base.borderBottomLeftRadius = radius;
-        base.borderBottomRightRadius = radius;
-      }
-    }
-
-    return base;
-  }, [position, width, height, minHeight, round, radius, centerPopRadius]);
-
-  const animatedStyle = useMemo(() => {
-    if (position === 'center') {
-      return {
-        opacity: animatedValue
-      };
-    }
-
-    const distance = height || minHeight;
-    return {
-      transform: [
-        {
-          translateY: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: position === 'bottom' ? [distance, 0] : [-distance, 0],
-          }),
-        },
-      ],
-    };
-  }, [position, animatedValue, height, minHeight]);
-
-  const closeIconStyle = useMemo(
-    () => ({
-      width: closeIconWidth,
-      height: closeIconHeight,
-    }),
-    [closeIconWidth, closeIconHeight]
-  );
-
-  const closeButtonPressableStyle = useMemo<ViewStyle>(
-    () => ({
+  if (!mounted) return null;
+  const baseStyle: ViewStyle = {
+    backgroundColor: '#fff',
+    ...(height ? { height } : { minHeight }),
+    width:
+      position === 'center'
+        ? (width ?? 300) as ViewStyle['width']
+        : '100%',
+  };
+  if (position !== 'center') {
+    //上弹出层or下弹出层
+    Object.assign(baseStyle, {
       position: 'absolute',
-      right: 10,
-      [position === 'top' ? 'bottom' : 'top']: 10,
-      zIndex: 999,
-    }),
-    [position]
-  );
-
-  if (!realVisible) {
-    return null;
+      left: 0,
+      right: 0,
+      ...(position === 'bottom' ? { bottom: 0 } : { top: 0 }),
+    });
   }
+  if (round) {
+    if (position === 'center') {
+      baseStyle.borderRadius = centerRadius;
+    } else if (position === 'bottom') {
+      baseStyle.borderTopLeftRadius = radius;
+      baseStyle.borderTopRightRadius = radius;
+    } else {
+      baseStyle.borderBottomLeftRadius = radius;
+      baseStyle.borderBottomRightRadius = radius;
+    }
+  }
+  const animatedStyle =
+    position === 'center'
+      ? { opacity: progress }
+      : {
+          transform: [
+            {
+              translateY: progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [
+                  position === 'bottom'
+                    ? height ?? minHeight
+                    : -(height ?? minHeight),
+                  0,
+                ],
+              }),
+            },
+          ],
+        };
 
   return (
     <OverLay
-      useModal={useModal}
-      visible={realVisible}
+      visible={mounted}
       overlayStyle={overlayStyle}
       onOverlayPress={closeOnOverlayPress ? onClose : undefined}
     >
       <Animated.View style={[baseStyle, animatedStyle, style]}>
         {children}
+
         {closeable && (
           <Pressable
             hitSlop={15}
             onPress={onClose}
-            style={closeButtonPressableStyle}
+            style={{
+              position: 'absolute',
+              right: 10,
+              [position === 'top' ? 'bottom' : 'top']: 10,
+            }}
           >
             <Image
               source={require('./assets/icon-close.png')}
-              style={closeIconStyle}
+              style={closeIconSize}
             />
           </Pressable>
         )}
@@ -187,4 +143,5 @@ export const Popup: React.FC<PopupProps> = (props) => {
     </OverLay>
   );
 };
+
 Popup.displayName = 'Popup';
