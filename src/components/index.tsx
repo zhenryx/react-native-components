@@ -18,6 +18,9 @@ export type { PopupProps } from './Popup/Popup';
 
 export { Text } from './Text/Text';
 
+export { TabView } from './TabView/TabView';
+export type { TabViewProps, Tab } from './TabView/TabView';
+
 export { ThemeProvider, useTheme } from './ThemeConfig/ThemeConfig';
 export type { Theme } from './ThemeConfig/ThemeConfig';
 
