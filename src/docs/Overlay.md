@@ -1,30 +1,53 @@
-# Overlay 遮罩层组件
+# Overlay
 
-## 简介
+遮罩层组件用于在内容上方显示半透明遮罩，通常作为弹窗、对话框等组件的背景层使用。
 
-Overlay 是一个遮罩层组件，通常用于弹窗、对话框等场景的背景遮罩。
+## Usage
 
-## Props
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| children | React.ReactNode | - | 子组件 |
-| visible | boolean | - | 是否显示（必填） |
-| overlayStyle | StyleProp<ViewStyle> | - | 遮罩样式 |
-| onOverlayPress | () => void | - | 点击遮罩回调 |
-
-## 使用示例
+### Import
 
 ```tsx
-import { OverLay } from 'react-native-components';
+import { OverLay } from '@zhenryx/react-native-components';
+```
 
+## Basic
+
+基本用法，显示遮罩层。
+
+```tsx
+<OverLay visible={visible}>
+  <View>
+    <Text>遮罩层内容</Text>
+  </View>
+</OverLay>
+```
+
+## Overlay Press
+
+可以通过 `onOverlayPress` 属性处理点击遮罩的事件。
+
+```tsx
 <OverLay 
   visible={visible}
   onOverlayPress={() => setVisible(false)}
 >
   <View>
-    <Text>内容</Text>
+    <Text>点击遮罩关闭</Text>
   </View>
 </OverLay>
 ```
 
+## Custom Style
+
+可以通过 `overlayStyle` 属性自定义遮罩样式。
+
+```tsx
+<OverLay 
+  visible={visible}
+  overlayStyle={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+>
+  <View>
+    <Text>自定义遮罩颜色</Text>
+  </View>
+</OverLay>
+```

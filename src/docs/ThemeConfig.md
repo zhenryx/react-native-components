@@ -1,25 +1,22 @@
-# ThemeConfig 主题配置
+# ThemeConfig
 
-## 简介
+主题配置提供了全局主题管理功能，支持自定义主题并应用到所有组件中。
 
-ThemeConfig 提供了主题配置功能，支持全局主题管理和自定义主题。
+## Usage
 
-## 组件
-
-### ThemeProvider
-
-主题提供者，需要在应用根部包裹。
-
-### useTheme
-
-获取主题的 Hook。
-
-## 使用示例
+### Import
 
 ```tsx
-import { ThemeProvider, useTheme } from 'react-native-components';
+import { ThemeProvider, useTheme } from '@zhenryx/react-native-components';
+```
 
-// 在应用根部
+## Setup
+
+在应用根部包裹 `ThemeProvider`。
+
+```tsx
+import { ThemeProvider } from '@zhenryx/react-native-components';
+
 function App() {
   return (
     <ThemeProvider>
@@ -27,10 +24,17 @@ function App() {
     </ThemeProvider>
   );
 }
+```
 
-// 在组件中使用
+## Use Theme
+
+在组件中使用 `useTheme` Hook 获取主题。
+
+```tsx
+import { useTheme } from '@zhenryx/react-native-components';
+
 function MyComponent() {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   
   return (
     <View style={{ backgroundColor: theme['$primary-color'] }}>
@@ -40,7 +44,28 @@ function MyComponent() {
 }
 ```
 
-## 主题配置项
+## Custom Theme
+
+可以通过 `setTheme` 方法动态修改主题。
+
+```tsx
+function MyComponent() {
+  const { theme, setTheme } = useTheme();
+  
+  const changeTheme = () => {
+    setTheme({
+      ...theme,
+      '$primary-color': '#007AFF',
+    });
+  };
+  
+  return (
+    <Button title="切换主题" onPress={changeTheme} />
+  );
+}
+```
+
+## Theme Keys
 
 主题对象支持以下配置项（可根据需要扩展）：
 
@@ -51,5 +76,3 @@ function MyComponent() {
 - `$header-height`: 头部高度
 - `$header-background`: 头部背景色
 - `$overlay-bg-color`: 遮罩背景色
-- 等等...
-

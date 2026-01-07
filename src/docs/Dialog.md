@@ -1,39 +1,65 @@
-# Dialog 对话框组件
+# Dialog
 
-## 简介
+对话框是一个模态组件，用于向用户显示重要信息或请求确认。它支持提示和确认两种类型。
 
-Dialog 是一个对话框组件，支持提示和确认两种类型。
+## Usage
 
-## Props
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| visible | boolean | false | 是否显示 |
-| type | 'alert' \| 'confirm' | 'alert' | 对话框类型 |
-| title | string | '提示' | 标题 |
-| content | string | - | 内容文本 |
-| titleStyle | TextStyle | - | 标题样式 |
-| contentStyle | TextStyle | - | 内容样式 |
-| closeOnOverlayPress | boolean | false | 点击遮罩是否关闭 |
-| round | boolean | false | 是否圆角 |
-| confirmText | string | '确认' | 确认按钮文本 |
-| cancelText | string | '取消' | 取消按钮文本 |
-| onConfirm | () => void | - | 确认回调 |
-| onCancel | () => void | - | 取消回调 |
-| children | React.ReactNode | - | 自定义内容 |
-
-## 使用示例
+### Import
 
 ```tsx
-import { Dialog } from 'react-native-components';
+import { Dialog } from '@zhenryx/react-native-components';
+```
+
+## Variants
+
+对话框有两种类型：提示框和确认框。
+
+```tsx
+<Dialog 
+  visible={visible}
+  type="alert"
+  title="提示"
+  content="这是一个提示信息"
+  onConfirm={() => setVisible(false)}
+/>
 
 <Dialog 
   visible={visible}
   type="confirm"
-  title="提示"
-  content="确定要删除吗？"
-  onConfirm={() => console.log('确认')}
-  onCancel={() => console.log('取消')}
+  title="确认"
+  content="确定要执行此操作吗？"
+  onConfirm={() => setVisible(false)}
+  onCancel={() => setVisible(false)}
 />
 ```
 
+## Customization
+
+可以通过 `round` 属性设置圆角样式，通过 `closeOnOverlayPress` 控制点击遮罩是否关闭。
+
+```tsx
+<Dialog 
+  visible={visible}
+  round={true}
+  closeOnOverlayPress={true}
+  title="自定义对话框"
+  content="支持圆角和点击遮罩关闭"
+  onConfirm={() => setVisible(false)}
+/>
+```
+
+## Custom Content
+
+可以通过 `children` 属性添加自定义内容。
+
+```tsx
+<Dialog 
+  visible={visible}
+  title="自定义内容"
+  onConfirm={() => setVisible(false)}
+>
+  <View>
+    <Text>这里是自定义内容</Text>
+  </View>
+</Dialog>
+```

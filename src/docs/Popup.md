@@ -1,41 +1,94 @@
-# Popup 弹出层组件
+# Popup
 
-## 简介
+弹出层是一个用于显示临时内容的组件，支持从底部、顶部或中间弹出，带有流畅的动画效果。
 
-Popup 是一个弹出层组件，支持从底部、顶部、中间弹出，带有动画效果。
+## Usage
 
-## Props
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| visible | boolean | false | 是否显示 |
-| position | 'bottom' \| 'center' \| 'top' | 'center' | 弹出位置 |
-| height | number | - | 高度（position 为 bottom/top 时使用） |
-| width | number \| string | - | 宽度（position 为 center 时默认 300） |
-| round | boolean | false | 是否圆角 |
-| closeable | boolean | false | 是否显示关闭按钮 |
-| closeOnOverlayPress | boolean | false | 点击遮罩是否关闭 |
-| overlayStyle | StyleProp<ViewStyle> | - | 遮罩样式 |
-| style | StyleProp<ViewStyle> | - | 弹出层样式 |
-| children | React.ReactNode | - | 内容 |
-| onClose | () => void | - | 关闭回调（必填） |
-
-## 使用示例
+### Import
 
 ```tsx
-import { Popup } from 'react-native-components';
+import { Popup } from '@zhenryx/react-native-components';
+```
 
+## Position
+
+弹出层支持三种位置：底部、中间和顶部。
+
+```tsx
+<Popup 
+  visible={visible}
+  position="bottom"
+  onClose={() => setVisible(false)}
+>
+  <Text>底部弹出</Text>
+</Popup>
+
+<Popup 
+  visible={visible}
+  position="center"
+  onClose={() => setVisible(false)}
+>
+  <Text>中间弹出</Text>
+</Popup>
+
+<Popup 
+  visible={visible}
+  position="top"
+  onClose={() => setVisible(false)}
+>
+  <Text>顶部弹出</Text>
+</Popup>
+```
+
+## Size
+
+可以通过 `height` 和 `width` 属性控制弹出层的尺寸。
+
+```tsx
 <Popup 
   visible={visible}
   position="bottom"
   height={400}
-  round={true}
-  closeable={true}
   onClose={() => setVisible(false)}
 >
-  <View>
-    <Text>弹出内容</Text>
-  </View>
+  <Text>自定义高度</Text>
+</Popup>
+
+<Popup 
+  visible={visible}
+  position="center"
+  width={300}
+  onClose={() => setVisible(false)}
+>
+  <Text>自定义宽度</Text>
 </Popup>
 ```
 
+## Round
+
+可以通过 `round` 属性设置圆角样式。
+
+```tsx
+<Popup 
+  visible={visible}
+  position="bottom"
+  round={true}
+  onClose={() => setVisible(false)}
+>
+  <Text>圆角弹出层</Text>
+</Popup>
+```
+
+## Closeable
+
+可以通过 `closeable` 属性显示关闭按钮。
+
+```tsx
+<Popup 
+  visible={visible}
+  closeable={true}
+  onClose={() => setVisible(false)}
+>
+  <Text>带关闭按钮的弹出层</Text>
+</Popup>
+```

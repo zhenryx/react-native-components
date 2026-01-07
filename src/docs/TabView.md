@@ -1,42 +1,64 @@
-# TabView 标签页组件
+# TabView
 
-## 简介
+标签页组件用于在多个内容视图之间切换，支持水平滚动的标签栏和自定义内容渲染。
 
-TabView 是一个标签页组件，支持多个标签切换显示不同内容。
+## Usage
 
-## Props
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| tabs | Tab[] | - | 标签列表（必填） |
-| defaultTab | string | - | 默认选中的标签 ID |
-| onTabChange | (tabId: string) => void | - | 标签切换回调 |
-| renderContent | (tab: Tab) => ReactNode | - | 自定义内容渲染函数 |
-
-## Tab 接口
-
-```typescript
-interface Tab {
-  id: string;        // 标签 ID（必填）
-  label: string;     // 标签文本（必填）
-  content?: ReactNode; // 标签内容
-}
-```
-
-## 使用示例
+### Import
 
 ```tsx
-import { TabView, Tab } from 'react-native-components';
+import { TabView, Tab } from '@zhenryx/react-native-components';
+```
 
+## Basic
+
+基本用法，使用 `content` 属性定义标签内容。
+
+```tsx
 const tabs: Tab[] = [
   { id: '1', label: '标签1', content: <Text>内容1</Text> },
   { id: '2', label: '标签2', content: <Text>内容2</Text> },
+  { id: '3', label: '标签3', content: <Text>内容3</Text> },
 ];
 
+<TabView tabs={tabs} />
+```
+
+## Default Tab
+
+可以通过 `defaultTab` 属性设置默认选中的标签。
+
+```tsx
 <TabView 
   tabs={tabs}
-  defaultTab="1"
-  onTabChange={(tabId) => console.log('切换到:', tabId)}
+  defaultTab="2"
 />
 ```
 
+## Custom Render
+
+可以通过 `renderContent` 属性自定义内容渲染方式。
+
+```tsx
+<TabView 
+  tabs={tabs}
+  renderContent={(tab) => (
+    <View>
+      <Text>自定义渲染: {tab.label}</Text>
+    </View>
+  )}
+/>
+```
+
+## Tab Change
+
+可以通过 `onTabChange` 回调监听标签切换。
+
+```tsx
+<TabView 
+  tabs={tabs}
+  onTabChange={(tabId) => {
+    console.log('切换到:', tabId);
+  }}
+/>
+```
