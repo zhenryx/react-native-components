@@ -31,3 +31,4 @@ import { Text } from '@zhenryx/react-native-components';
 ## Note
 
 该组件主要解决了 Android 平台上的文本截断问题。在 Android 上会自动应用 Roboto 字体以确保文本测量准确，在 iOS 上表现与原生 Text 组件一致。
+
