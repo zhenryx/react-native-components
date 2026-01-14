@@ -10,7 +10,7 @@
 import { Button } from '@zhenryx/react-native-components';
 ```
 
-## Variants
+## Fill
 
 按钮有实心按钮和描边按钮两种类型。
 
