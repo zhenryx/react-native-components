@@ -92,3 +92,23 @@ import LinearGradient from 'react-native-linear-gradient';
 <Button title="全宽按钮" fullWidth={true} />
 ```
 
+## Props
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| title | string | - | 按钮文本（必填） |
+| fill | 'solid' \| 'outline' | 'solid' | 填充模式：实心或描边 |
+| height | number | 36 | 按钮高度 |
+| width | ViewStyle['width'] | 120 | 按钮宽度 |
+| fullWidth | boolean | false | 是否全宽 |
+| color | string | - | 颜色（solid 背景、outline 边框与文本） |
+| disabled | boolean | false | 是否禁用 |
+| feedbackEffect | boolean | true | 是否开启点击反馈效果 |
+| onPress | () => void | - | 点击事件 |
+| icon | ImageSourcePropType | - | 图标 |
+| iconPosition | 'left' \| 'right' | 'right' | 图标位置 |
+| iconStyle | StyleProp<ImageStyle> | - | 图标样式 |
+| InnerComponent | ComponentType<any> | View | 支持渐变等自定义内部组件 |
+| linearGradientProps | Record<string, any> | - | 渐变组件属性 |
+| buttonStyle | StyleProp<ViewStyle> | - | 按钮容器样式 |
+| textStyle | StyleProp<TextStyle> | - | 文本样式 |

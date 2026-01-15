@@ -1,6 +1,5 @@
 import React, { useMemo, ReactNode } from "react"
 import { View, StyleProp, ViewStyle, TextStyle, Image, StyleSheet, Pressable } from "react-native"
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text } from "../Text/Text"
 import { useTheme } from "../ThemeConfig/ThemeConfig"
 
@@ -28,16 +27,14 @@ export const Header: React.FC<HeaderProps> = ({
   onBack
 }) => {
   const { theme } = useTheme()
-  const insets = useSafeAreaInsets()
   const headerStyle = useMemo<ViewStyle>(() => ({
-    height: (theme['$header-height'] || 44) + insets.top,
-    paddingTop: insets.top,
+    minHeight: theme['$header-height'] || 44 ,
     backgroundColor: backGroundColor || theme['$header-background'] || 'transparent',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme['$header-spacing'] || 15,
-  }), [theme, backGroundColor, insets.top])
+  }), [theme, backGroundColor])
 
   const defaultTitleStyle = useMemo<TextStyle>(() => ({
     fontSize: theme['$header-title-fontsize'] || 18,
