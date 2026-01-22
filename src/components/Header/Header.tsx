@@ -7,8 +7,11 @@ export interface HeaderProps {
   title?: string,
   backGroundColor?: string,
   leftComponent?: ReactNode,
+  leftComponentStyle?: StyleProp<ViewStyle>,
   centerComponent?: ReactNode,
+  centerComponentStyle?: StyleProp<ViewStyle>,
   rightComponent?: ReactNode,
+  rightComponentStyle?: StyleProp<ViewStyle>,
   containerStyle?: StyleProp<ViewStyle>,
   titleStyle?: StyleProp<TextStyle>,
   showBack?: boolean,
@@ -19,8 +22,11 @@ export const Header: React.FC<HeaderProps> = ({
   title = '自定义头部导航',
   backGroundColor,
   leftComponent,
+  leftComponentStyle,
   centerComponent,
+  centerComponentStyle,
   rightComponent,
+  rightComponentStyle,
   containerStyle,
   titleStyle: customTitleStyle,
   showBack = true,
@@ -58,13 +64,13 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <View style={[headerStyle, containerStyle]}>
-      <View style={styles.leftContainer}>
+      <View style={[styles.leftContainer, leftComponentStyle]}>
         {renderLeft()}
       </View>
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, centerComponentStyle]}>
         {renderCenter()}
       </View>
-      <View style={styles.rightContainer}>
+      <View style={[styles.rightContainer, rightComponentStyle]}>
         {rightComponent}
       </View>
     </View>
@@ -81,6 +87,8 @@ const styles = StyleSheet.create({
   },
   rightContainer: {
     flex: 1,
+    justifyContent: 'flex-end', 
+    flexDirection: 'row', 
   },
   icon_return: {
     width: 18,
